@@ -18,7 +18,7 @@ executable benchmarks
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,
-        split, deepseq, criterion
-  other-modules:       Tree, Aug, Types
+        split, deepseq, criterion, bytestring, text, containers, prettyprinter, random
+  other-modules:       Tree, Aug, Types, PatternGenerator
   ghc-options:         -O2
 

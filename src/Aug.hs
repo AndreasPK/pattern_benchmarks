@@ -1,5 +1,3 @@
---{-# OPTIONS_GHC -fno-tree-matching #-}
-
 module Aug where
 
 import Types
