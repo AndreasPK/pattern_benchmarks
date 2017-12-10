@@ -3,14 +3,19 @@
 module Main where
 
 import Types
-import qualified Tree
 import qualified Aug
+import qualified Tree
+--import qualified GeneratedAug as Aug
+--import qualified GeneratedTree as Tree
+import GeneratedBenchs as GenBench
 
-import Data.Int
-import Data.Bits
+
+--import Data.Int
+--import Data.Bits
 import Data.List
 import System.Random
 import Control.Monad
+--import Data.Text.Prettyprint.Doc hiding ((<>))
 
 import Criterion.Main
 
@@ -19,7 +24,7 @@ tuple3 [x,y,z] = (x,y,z)
 
 enumList :: IO [(T,T,T)]
 enumList = do
-  let allValues = take 5000 . concat . permutations $ [(toEnum x,toEnum y,toEnum z) | !x <- [0..4], y <- [0..4], z <- [0..4] ] :: [(T,T,T)]
+  let allValues = take 1 . concat . permutations $ [(toEnum x,toEnum y,toEnum z) | !x <- [0..4], y <- [0..4], z <- [0..4] ] :: [(T,T,T)]
   return allValues
 
 enumListRandom :: IO [(T,T,T)]
@@ -30,7 +35,7 @@ enumListRandom = do
 
 intTuples :: IO [(Int,Int,Int)]
 intTuples = do
-  let allValues = take 5000 . concat . permutations $ [(x,y,z) | !x <- [1..5], y <- [1..5], z <- [1..5] ]
+  let allValues = take 1 . concat . permutations $ [(x,y,z) | !x <- [1..5], y <- [1..5], z <- [1..5] ]
   return allValues
 
 intTuplesRandom :: IO [(Int,Int,Int)] 
@@ -39,12 +44,16 @@ intTuplesRandom = do
   let vals = replicateM 500 $ sequence [randomRIO (1,5), randomRIO (1,5), randomRIO (1,5)] :: IO [[Int]]
   map tuple3 <$> vals
 
+enumListABC :: IO [(T,T,T)]
+enumListABC = do
+  let allValues = take 1 . concat . permutations $ [(toEnum x,toEnum y,toEnum z) | !x <- [0..2], y <- [0..2], z <- [0..2] ] :: [(T,T,T)]
+  return allValues
 
-
-main =
+main :: IO ()
+main = 
   defaultMain
-    [
-      env enumList $ \ args -> bgroup "enum/ordered" [
+    [ env enumListABC genGrp
+    , env enumList $ \ args -> bgroup "enum/ordered" [
         bgroup "f1" [
           bench "aug " $ nf (sum . map (\(a,b,c) -> (Aug.f1  a b c))) args
         , bench "tree" $ nf (sum . map (\(a,b,c) -> (Tree.f1 a b c))) args

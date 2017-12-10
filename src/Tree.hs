@@ -1,4 +1,9 @@
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+{-# LANGUAGE CPP #-}
+
+#if __GLASGOW_HASKELL__ >= 802
 {-# OPTIONS_GHC -ftree-matching #-}
+#endif
 
 module Tree where
 

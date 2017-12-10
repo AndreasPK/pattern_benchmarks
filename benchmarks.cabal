@@ -13,12 +13,22 @@ build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
 
+
 executable benchmarks
-  hs-source-dirs:      src
+  hs-source-dirs:      src, generated
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,
-        split, deepseq, criterion, bytestring, text, containers, prettyprinter, random
-  other-modules:       Tree, Aug, Types, PatternGenerator
-  ghc-options:         -O2
+        split, deepseq, criterion, bytestring, text, containers, prettyprinter, random, random-shuffle, MonadRandom
+  other-modules:       Tree, Aug, Types, GeneratedTree, GeneratedAug, GeneratedBenchs
+  ghc-options:         -O2 -rtsopts -threaded
+
+executable pattern-generator
+  hs-source-dirs:      generator
+  main-is:             GenMain.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5,
+        split, deepseq, criterion, bytestring, text, containers, prettyprinter, random, random-shuffle, MonadRandom
+  other-modules:       PatternGenerator
+  ghc-options:         -O -rtsopts -threaded
 
