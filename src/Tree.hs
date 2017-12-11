@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE BangPatterns #-}
 
 #if __GLASGOW_HASKELL__ >= 802
 {-# OPTIONS_GHC -ftree-matching #-}
@@ -48,3 +49,23 @@ f2Int 4 _ _ = 4
 f2Int _ 3 2 = 5
 f2Int 1 _ 1 = 6
 f2Int _ _ _ = 7
+
+--span                    :: (a -> Bool) -> [a] -> ([a],[a])
+span                    :: (Int -> Bool) -> [Int] -> ([Int],[Int])
+span _ xs@[]            =  (xs, xs)
+span p xs@(x:xs')
+         | p x          =  let (ys,zs) = Tree.span p xs' in (x:ys,zs)
+         | otherwise    =  ([],xs)
+
+
+{-# INLINE [1] take #-}
+take n xs | 0 < n     = unsafeTake n xs
+          | otherwise = []
+
+-- A version of take that takes the whole list if it's given an argument less
+-- than 1.
+{-# NOINLINE [1] unsafeTake #-}
+unsafeTake :: Int -> [a] -> [a]
+unsafeTake !_  []     = []
+unsafeTake 1   (x: _) = [x]
+unsafeTake m   (x:xs) = x : unsafeTake (m - 1) xs

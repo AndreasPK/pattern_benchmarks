@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns #-}
+
 module Aug where
 
 import Types
@@ -42,3 +44,4 @@ f2Int 4 _ _ = 4
 f2Int _ 3 2 = 5
 f2Int 1 _ 1 = 6
 f2Int _ _ _ = 7
+

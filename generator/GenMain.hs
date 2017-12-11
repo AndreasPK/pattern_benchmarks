@@ -11,7 +11,7 @@ import Data.List
 import Data.Monoid ((<>))
 import Data.Text.Prettyprint.Doc hiding ((<>))
 
-functionCount = 100 :: Int
+functionCount = 500 :: Int
 
 getName :: Int -> Doc a
 getName i = pretty "gen_func_" <> pretty i :: Doc a
@@ -50,7 +50,7 @@ genBench fname =
 
 writeBenchs :: forall a. IO ()
 writeBenchs = do
-    let benchs = map (genBench . getName) [1..100] :: [Doc a]
+    let benchs = map (genBench . getName) [1..functionCount] :: [Doc a]
     let benchText = brackets $ mconcat $ intersperse comma benchs
     let text = 
             pretty "{-# OPTIONS_GHC -fno-warn-missing-signatures #-}" <> line <>

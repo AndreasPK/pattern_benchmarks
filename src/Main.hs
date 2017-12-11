@@ -8,6 +8,7 @@ import qualified Tree
 --import qualified GeneratedAug as Aug
 --import qualified GeneratedTree as Tree
 import GeneratedBenchs as GenBench
+import BenchBase.BaseBenchs
 
 
 --import Data.Int
@@ -49,10 +50,13 @@ enumListABC = do
   let allValues = take 1 . concat . permutations $ [(toEnum x,toEnum y,toEnum z) | !x <- [0..2], y <- [0..2], z <- [0..2] ] :: [(T,T,T)]
   return allValues
 
+
+
 main :: IO ()
 main = 
   defaultMain
     [ env enumListABC genGrp
+    , benchBase
     , env enumList $ \ args -> bgroup "enum/ordered" [
         bgroup "f1" [
           bench "aug " $ nf (sum . map (\(a,b,c) -> (Aug.f1  a b c))) args

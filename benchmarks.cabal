@@ -19,9 +19,12 @@ executable benchmarks
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,
-        split, deepseq, criterion, bytestring, text, containers, prettyprinter, random, random-shuffle, MonadRandom
-  other-modules:       Tree, Aug, Types, GeneratedTree, GeneratedAug, GeneratedBenchs
-  ghc-options:         -O2 -rtsopts -threaded
+        split, deepseq, criterion, bytestring, text, containers, prettyprinter, random, random-shuffle, MonadRandom, integer-gmp
+  other-modules:       Tree, Aug, Types, GeneratedTree, GeneratedAug, GeneratedBenchs, 
+                       BenchBase.BaseBenchs,
+                       BenchBase.BaseAug,
+                       BenchBase.BaseTree
+  ghc-options:         -O2 -rtsopts
 
 executable pattern-generator
   hs-source-dirs:      generator
