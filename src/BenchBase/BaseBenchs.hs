@@ -8,50 +8,50 @@ import Criterion.Main
 intList :: IO [Int]
 intList = return [0..1000]
 
-benchTreeSpanS :: [Int] -> Benchmark
-benchTreeSpanS args = 
-  bench "spanTree" $ whnf (sum . fst . Tree.span (< 3)) args
+benchTreeSpanS :: IO [Int] -> Benchmark
+benchTreeSpanS envAction = 
+  env envAction $ \args -> bench "spanTree" $ whnf (sum . fst . Tree.span (< 3)) args
 
-benchAugSpanS :: [Int] -> Benchmark
-benchAugSpanS args = 
-  bench "spanAug" $ whnf (sum . fst . Aug.span (< 3)) args
+benchAugSpanS :: IO [Int] -> Benchmark
+benchAugSpanS envAction = 
+  env envAction $ \args -> bench "spanAug" $ whnf (sum . fst . Aug.span (< 3)) args
 
-benchTreeSpanL :: [Int] -> Benchmark
-benchTreeSpanL args = 
-  bench "spanTree" $ whnf (sum . fst . Tree.span (< 30)) args
+benchTreeSpanL :: IO [Int] -> Benchmark
+benchTreeSpanL envAction = 
+  env envAction $ \args -> bench "spanTree" $ whnf (sum . fst . Tree.span (< 30)) args
 
-benchAugSpanL :: [Int] -> Benchmark
-benchAugSpanL args = 
-  bench "spanAug" $ whnf (sum . fst . Aug.span (< 30)) args
+benchAugSpanL :: IO [Int] -> Benchmark
+benchAugSpanL envAction = 
+  env envAction $ \args -> bench "spanAug" $ whnf (sum . fst . Aug.span (< 30)) args
 
-benchAugTake :: Int -> [Int] -> Benchmark
-benchAugTake count args = 
-  bench ("takeAug"++show count) $ nf (sum . Aug.unsafeTake count) args
+benchAugTake :: Int -> IO [Int] -> Benchmark
+benchAugTake count envAction = 
+  env envAction $ \args -> bench ("takeAug"++show count) $ nf (sum . Aug.unsafeTake count) args
 
-benchTreeTake :: Int -> [Int] -> Benchmark
-benchTreeTake count args = 
-  bench ("takeTree"++show count) $ nf (sum . Tree.unsafeTake count) args
+benchTreeTake :: Int -> IO [Int] -> Benchmark
+benchTreeTake count envAction = 
+  env envAction $ \args -> bench ("takeTree"++show count) $ nf (sum . Tree.unsafeTake count) args
 
-benchTreeTake20 :: [Int] -> Benchmark
-benchTreeTake20 args = 
-  bench ("takeTree_20_2") $ nf (sum . Tree.unsafeTake 20) args
+benchTreeTake20 :: IO [Int] -> Benchmark
+benchTreeTake20 envAction = 
+  env envAction $ \args -> bench ("takeTree_20_2") $ nf (sum . Tree.unsafeTake 20) args
 
 benchBase = bgroup "base" 
-    [ env intList $ \args -> bgroup "take" 
-        [ benchAugTake 2 args
-        , benchTreeTake 2 args
-        , benchAugTake 5 args
-        , benchTreeTake 5 args
-        , benchAugTake 10 args
-        , benchTreeTake 10 args
-        , benchAugTake 20 args
-        , benchTreeTake 20 args
-        , benchTreeTake20 args
+    [ bgroup "take" 
+        [ benchAugTake 2 intList
+        , benchTreeTake 2 intList
+        , benchAugTake 5 intList
+        , benchTreeTake 5 intList
+        , benchAugTake 10 intList
+        , benchTreeTake 10 intList
+        , benchAugTake 20 intList
+        , benchTreeTake 20 intList
+        , benchTreeTake20 intList
         ]
-    , env intList $ \args -> bgroup "span" 
-        [ benchAugSpanS args
-        , benchTreeSpanS args
-        , benchAugSpanL args
-        , benchTreeSpanL args
+    , bgroup "span" 
+        [ benchAugSpanS intList
+        , benchTreeSpanS intList
+        , benchAugSpanL intList
+        , benchTreeSpanL intList
         ]
     ]

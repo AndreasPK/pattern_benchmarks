@@ -55,7 +55,7 @@ enumListABC = do
 main :: IO ()
 main = 
   defaultMain
-    [ env enumListABC genGrp
+    [ genGrp enumListABC
     , benchBase
     , env enumList $ \ args -> bgroup "enum/ordered" [
         bgroup "f1" [
